@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\JobPost;
-use App\Models\JobPostSkill;
 use App\Models\Skill;
+use App\Models\JobPost;
+use App\ExperienceLevel;
+use Illuminate\Support\Str;
+use App\Models\JobPostSkill;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class JobPostSkillFactory extends Factory
 {
@@ -25,7 +26,7 @@ class JobPostSkillFactory extends Factory
         return [
             'job_post_id' => JobPost::factory(),
             'skill_id' => Skill::factory(),
-            'experience_level' => fake()->word(),
+            'experience_level' => fake()->randomElement(ExperienceLevel::cases()),
             'years_of_experience' => fake()->numberBetween(0, 50),
             'is_required' => fake()->boolean(),
         ];

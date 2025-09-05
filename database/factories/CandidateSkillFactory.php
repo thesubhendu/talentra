@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\Candidate;
-use App\Models\CandidateSkill;
 use App\Models\Skill;
+use App\ExperienceLevel;
+use App\Models\Candidate;
+use Illuminate\Support\Str;
+use App\Models\CandidateSkill;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CandidateSkillFactory extends Factory
 {
@@ -25,7 +26,7 @@ class CandidateSkillFactory extends Factory
         return [
             'candidate_id' => Candidate::factory(),
             'skill_id' => Skill::factory(),
-            'experience_level' => fake()->word(),
+            'experience_level' => fake()->randomElement(ExperienceLevel::cases()),
             'years_of_experience' => fake()->numberBetween(0, 50),
         ];
     }
