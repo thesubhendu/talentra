@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('job_post_id')->constrained();
             $table->foreignId('skill_id')->constrained();
             $table->string('experience_level')->nullable();
-            $table->integer('years_of_experience')->nullable();
+            $table->unsignedSmallInteger('years_of_experience')->nullable();
             $table->boolean('is_required')->default(false);
             $table->timestamps();
         });

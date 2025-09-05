@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('status');
             $table->string('employment_type');
-            $table->integer('salary_min');
-            $table->integer('salary_max');
+            $table->unsignedInteger('salary_min');
+            $table->unsignedInteger('salary_max');
             $table->timestamp('posted_at');
             $table->timestamp('expires_at')->nullable();
             $table->string('location');

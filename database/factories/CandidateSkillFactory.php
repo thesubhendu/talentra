@@ -26,7 +26,7 @@ class CandidateSkillFactory extends Factory
             'candidate_id' => Candidate::factory(),
             'skill_id' => Skill::factory(),
             'experience_level' => fake()->word(),
-            'years_of_experience' => fake()->numberBetween(-10000, 10000),
+            'years_of_experience' => fake()->numberBetween(0, 50),
         ];
     }
 }

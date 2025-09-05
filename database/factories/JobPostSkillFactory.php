@@ -26,7 +26,7 @@ class JobPostSkillFactory extends Factory
             'job_post_id' => JobPost::factory(),
             'skill_id' => Skill::factory(),
             'experience_level' => fake()->word(),
-            'years_of_experience' => fake()->numberBetween(-10000, 10000),
+            'years_of_experience' => fake()->numberBetween(0, 50),
             'is_required' => fake()->boolean(),
         ];
     }
