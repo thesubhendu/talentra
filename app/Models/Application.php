@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\ApplicationStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Application extends Model
 {
@@ -34,6 +35,7 @@ class Application extends Model
             'id' => 'integer',
             'job_post_id' => 'integer',
             'candidate_id' => 'integer',
+            'status' => ApplicationStatus::class,
         ];
     }
 

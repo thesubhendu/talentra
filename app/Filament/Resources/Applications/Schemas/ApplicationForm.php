@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\Applications\Schemas;
 
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use App\ApplicationStatus;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 
 class ApplicationForm
 {
@@ -19,7 +20,8 @@ class ApplicationForm
                 Select::make('candidate_id')
                     ->relationship('candidate', 'id')
                     ->required(),
-                TextInput::make('status')
+                Select::make('status')
+                    ->options(ApplicationStatus::class)
                     ->required(),
                 Textarea::make('cover_letter')
                     ->columnSpanFull(),
