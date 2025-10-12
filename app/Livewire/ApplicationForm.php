@@ -56,27 +56,57 @@ class ApplicationForm extends Component implements HasSchemas
     public function create(): void
     {
         $formData = $this->form->getState();
-        // create candidate
-        $candidate = Candidate::create([
-            'first_name' => $formData['first_name'],
-            'last_name' => $formData['last_name'],
-            'email' => $formData['email'],
-            'phone' => $formData['phone'],
-        ]);
+        
+        try {
+            // Check if candidate already exists by email
+            $candidate = Candidate::firstOrCreate(
+                ['email' => $formData['email']],
+                [
+                    'first_name' => $formData['first_name'],
+                    'last_name' => $formData['last_name'],
+                    'phone' => $formData['phone'],
+                ]
+            );
 
-        // create application
-        Application::create([
-            'job_post_id' => $this->jobPost->id,
-            'candidate_id' => $candidate->id,
-            'cover_letter' => $formData['cover_letter'],
-            'resume_url' => $formData['resume'],
-            'status' => ApplicationStatus::PENDING,
-        ]);
+            // Check if application already exists for this job and candidate
+            $existingApplication = Application::where('job_post_id', $this->jobPost->id)
+                ->where('candidate_id', $candidate->id)
+                ->first();
 
-        Notification::make()
-            ->title('Application submitted successfully')
-            ->success()
-            ->send();
+            if ($existingApplication) {
+                Notification::make()
+                    ->title('Application already exists')
+                    ->body('You have already applied for this position.')
+                    ->warning()
+                    ->send();
+                return;
+            }
+
+            // Create application
+            Application::create([
+                'job_post_id' => $this->jobPost->id,
+                'candidate_id' => $candidate->id,
+                'cover_letter' => $formData['cover_letter'],
+                'resume_url' => $formData['resume'],
+                'status' => ApplicationStatus::PENDING,
+            ]);
+
+            Notification::make()
+                ->title('Application submitted successfully')
+                ->body('Thank you for your application. We will review it and get back to you soon.')
+                ->success()
+                ->send();
+
+            // Reset form after successful submission
+            $this->form->fill();
+            
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Error submitting application')
+                ->body('Please try again or contact support if the problem persists.')
+                ->danger()
+                ->send();
+        }
     }
 
     public function render()
