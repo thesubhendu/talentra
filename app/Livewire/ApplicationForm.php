@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Models\Candidate;
 use App\ApplicationStatus;
 use App\Models\Application;
+use App\Services\NotificationService;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -83,13 +84,18 @@ class ApplicationForm extends Component implements HasSchemas
             }
 
             // Create application
-            Application::create([
+            $application = Application::create([
                 'job_post_id' => $this->jobPost->id,
                 'candidate_id' => $candidate->id,
                 'cover_letter' => $formData['cover_letter'],
                 'resume_url' => $formData['resume'],
                 'status' => ApplicationStatus::PENDING,
             ]);
+
+            // Send email notifications
+            $notificationService = new NotificationService();
+            $notificationService->sendApplicationSubmittedNotification($application);
+            $notificationService->sendNewApplicationNotification($application);
 
             Notification::make()
                 ->title('Application submitted successfully')
@@ -106,6 +112,13 @@ class ApplicationForm extends Component implements HasSchemas
                 ->body('Please try again or contact support if the problem persists.')
                 ->danger()
                 ->send();
+
+            // Log the error for debugging
+            \Log::error('Application submission error', [
+                'error' => $e->getMessage(),
+                'job_post_id' => $this->jobPost->id,
+                'candidate_email' => $formData['email'] ?? 'unknown'
+            ]);
         }
     }
 

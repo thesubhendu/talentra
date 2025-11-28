@@ -115,4 +115,12 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+
+
+    'hr_emails' => array_filter([
+        env('HR_EMAIL_1', 'hr@example.com'),
+        env('HR_EMAIL_2'),
+        env('HR_EMAIL_3'),
+    ]),
+
 ];
