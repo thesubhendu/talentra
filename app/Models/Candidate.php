@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Application;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Candidate extends Model
 {
@@ -41,7 +40,7 @@ class Candidate extends Model
 
     public function skills(): BelongsToMany
     {
-        return $this->belongsToMany(Skill::class)
+        return $this->belongsToMany(Skill::class, 'candidate_skills')
             ->using(CandidateSkill::class)
             ->as('candidate_skill')
             ->withPivot('id', 'experience_level', 'years_of_experience')

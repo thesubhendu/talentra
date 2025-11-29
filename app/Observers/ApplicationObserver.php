@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\ProcessApplicationScreeningJob;
 use App\Models\Application;
 use App\Services\NotificationService;
 
@@ -12,7 +13,8 @@ class ApplicationObserver
      */
     public function created(Application $application): void
     {
-        //
+        // Dispatch screening job asynchronously
+        ProcessApplicationScreeningJob::dispatch($application);
     }
 
     /**
@@ -22,7 +24,7 @@ class ApplicationObserver
     {
         // Check if status was changed
         if ($application->isDirty('status')) {
-            $notificationService = new NotificationService();
+            $notificationService = new NotificationService;
             $notificationService->sendApplicationStatusChangedNotification($application);
         }
     }
